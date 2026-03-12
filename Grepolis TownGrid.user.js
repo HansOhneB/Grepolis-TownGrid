@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name Grepolis TownGrid
+// @version      1.0.0
+// @author       HansOhneB | Oskar
 // @match https://*.grepolis.com/*
 // @grant none
 // ==/UserScript==
-// by HansOhneB | Oskar
-// v.1.0
 
 (function () {
 'use strict';
