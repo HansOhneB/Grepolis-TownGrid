@@ -212,7 +212,7 @@ function openSettings(){
         Höhe<br>
         <input id="set-height" type="number" value="${SETTINGS.height}" style="width:100%"><br><br>
 
-        Zeilen im Grid<br>
+        Zeilen im Raster<br>
         <input id="set-rows" type="number" value="${SETTINGS.rows}" style="width:100%"><br><br>
 
         Anzahl Zeilen für Gruppen<br>
@@ -292,5 +292,6 @@ function openSettings(){
 
 createButton();
 applyCSS();
+
 
 })();
