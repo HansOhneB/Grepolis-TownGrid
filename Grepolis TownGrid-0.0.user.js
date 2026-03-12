@@ -1,0 +1,296 @@
+// ==UserScript==
+// @name Grepolis TownGrid
+// @match https://*.grepolis.com/*
+// @grant none
+// ==/UserScript==
+// by HansOhneB | Oskar
+// v.1.0
+
+(function () {
+'use strict';
+
+/* =============================
+   DEFAULT SETTINGS
+============================= */
+
+const DEFAULT_SETTINGS = {
+    columns: 5,
+    rows: 6,
+    spanAlle: 6,
+    spanS0: 3,
+    spanS1: 3,
+    spanS2: 2,
+    spanS3: 2,
+    spanS4: 2,
+    spanS5: 2,
+    spanS6: 2,
+    spanS7: 2,
+    spanS8: 2,
+    spanS9: 2,
+    spanKeine: 2,
+    columnWidth: 250,
+    height: 660
+};
+
+const SETTINGS = {DEFAULT_SETTINGS};
+
+/* =============================
+   SETTINGS LADEN
+============================= */
+
+const saved = localStorage.getItem("gp_grid_settings");
+if (saved) {
+    Object.assign(SETTINGS, JSON.parse(saved));
+}
+
+/* =============================
+   CSS GENERATOR
+============================= */
+
+let styleElement;
+
+function applyCSS(){
+
+    const containerWidth = SETTINGS.columns * SETTINGS.columnWidth;
+
+    const css = `
+
+    .town_groups_list,
+    .town_groups_list.content {
+        width: ${containerWidth}px !important;
+        min-height: ${SETTINGS.height}px !important;
+    }
+
+    .town_groups_list.content {
+        display: grid !important;
+
+        grid-template-columns: repeat(${SETTINGS.columns}, ${SETTINGS.columnWidth}px);
+        grid-template-rows: repeat(${SETTINGS.rows}, 1fr);
+
+        grid-auto-flow: column;
+
+        gap: 0;
+        padding-bottom: 10px;
+    }
+
+    .town_group {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+
+        width: ${SETTINGS.columnWidth}px !important;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    .town_group_-1 {
+        grid-column: 1;
+        grid-row: 1 / span ${SETTINGS.spanAlle} !important;
+    }
+
+    .town_group:nth-of-type(2){
+        grid-row: span ${SETTINGS.spanS0} !important;
+    }
+
+    .town_group:nth-of-type(3){
+        grid-row: span ${SETTINGS.spanS1} !important;
+    }
+
+    .town_group:nth-of-type(4){
+        grid-row: span ${SETTINGS.spanS2} !important;
+    }
+
+    .town_group:nth-of-type(5){
+        grid-row: span ${SETTINGS.spanS3} !important;
+    }
+
+    .town_group:nth-of-type(6){
+        grid-row: span ${SETTINGS.spanS4} !important;
+    }
+
+    .town_group:nth-of-type(7){
+        grid-row: span ${SETTINGS.spanS5} !important;
+    }
+
+    .town_group:nth-of-type(8){
+        grid-row: span ${SETTINGS.spanS6} !important;
+    }
+
+    .town_group:nth-of-type(9){
+        grid-row: span ${SETTINGS.spanS7} !important;
+    }
+
+    .town_group:nth-of-type(10){
+        grid-row: span ${SETTINGS.spanS8} !important;
+    }
+
+    .town_group:nth-of-type(11){
+        grid-row: span ${SETTINGS.spanS9} !important;
+    }
+
+    .town_group_-2{
+        grid-row: span ${SETTINGS.spanKeine} !important;
+    }
+
+    .town_group > div:first-child {
+        flex: 0 0 auto;
+        z-index: 5;
+    }
+
+    .town_group .group_towns {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        height: auto !important;
+    }
+
+    .town_group .group_towns[style] {
+        height: auto !important;
+    }
+    `;
+
+    if(!styleElement){
+        styleElement = document.createElement("style");
+        document.head.appendChild(styleElement);
+    }
+
+    styleElement.textContent = css;
+}
+
+/* =============================
+   SETTINGS BUTTON
+============================= */
+
+function createButton(){
+
+    const btn = document.createElement("button");
+
+    btn.textContent = "⚙ Grid";
+    btn.style.position = "fixed";
+    btn.style.top = "0.5%";
+    btn.style.right = "30%";
+    btn.style.zIndex = "9999";
+    btn.style.background = "transparent";
+
+    btn.onclick = openSettings;
+
+    document.body.appendChild(btn);
+}
+
+/* =============================
+   SETTINGS MENU
+============================= */
+
+function openSettings(){
+
+    if(document.getElementById("gp-settings")) return;
+
+    const panel = document.createElement("div");
+    panel.id = "gp-settings";
+
+    panel.style.position = "fixed";
+    panel.style.top = "1%";
+    panel.style.right = "1%";
+    panel.style.width = "240px";
+    panel.style.background = "#2f2f2f";
+    panel.style.color = "white";
+    panel.style.padding = "12px";
+    panel.style.zIndex = "999999";
+    panel.style.borderRadius = "6px";
+    panel.style.boxShadow = "0 0 10px rgba(0,0,0,0.5)";
+    panel.style.fontSize = "13px";
+
+    panel.innerHTML = `
+        <b>Grid Einstellungen</b><br><br>
+
+        Spalten<br>
+        <input id="set-columns" type="number" value="${SETTINGS.columns}" style="width:100%"><br><br>
+
+        Spaltenbreite<br>
+        <input id="set-width" type="number" value="${SETTINGS.columnWidth}" style="width:100%"><br><br>
+
+        Höhe<br>
+        <input id="set-height" type="number" value="${SETTINGS.height}" style="width:100%"><br><br>
+
+        Zeilen im Raster<br>
+        <input id="set-rows" type="number" value="${SETTINGS.rows}" style="width:100%"><br><br>
+
+        Anzahl Zeilen für Gruppen<br>
+        Alle:
+        <input id="set-spanAlle" type="number" value="${SETTINGS.spanAlle}" style="width:100%"><br>
+        1:
+        <input id="set-spanS0" type="number" value="${SETTINGS.spanS0}" style="width:100%"><br>
+        2:
+        <input id="set-spanS1" type="number" value="${SETTINGS.spanS1}" style="width:100%"><br>
+        3:
+        <input id="set-spanS2" type="number" value="${SETTINGS.spanS2}" style="width:100%"><br>
+        4:
+        <input id="set-spanS3" type="number" value="${SETTINGS.spanS3}" style="width:100%"><br>
+        5:
+        <input id="set-spanS4" type="number" value="${SETTINGS.spanS4}" style="width:100%"><br>
+        6:
+        <input id="set-spanS5" type="number" value="${SETTINGS.spanS5}" style="width:100%"><br>
+        7:
+        <input id="set-spanS6" type="number" value="${SETTINGS.spanS6}" style="width:100%"><br>
+        8:
+        <input id="set-spanS7" type="number" value="${SETTINGS.spanS7}" style="width:100%"><br>
+        9:
+        <input id="set-spanS8" type="number" value="${SETTINGS.spanS8}" style="width:100%"><br>
+        10:
+        <input id="set-spanS9" type="number" value="${SETTINGS.spanS9}" style="width:100%"><br>
+        Keine:
+        <input id="set-spanKeine" type="number" value="${SETTINGS.spanKeine}" style="width:100%"><br>
+
+        <button id="save-settings">Speichern</button>
+        <button id="reset-settings">Standard</button>
+        <button id="close-settings">Schließen</button>
+    `;
+
+    document.body.appendChild(panel);
+
+    document.getElementById("save-settings").onclick = function(){
+
+        SETTINGS.columns = Number(document.getElementById("set-columns").value);
+        SETTINGS.columnWidth = Number(document.getElementById("set-width").value);
+        SETTINGS.height = Number(document.getElementById("set-height").value);
+        SETTINGS.rows = Number(document.getElementById("set-rows").value);
+        SETTINGS.spanAlle = Number(document.getElementById("set-spanAlle").value);
+        SETTINGS.spanS0 = Number(document.getElementById("set-spanS0").value);
+        SETTINGS.spanS1 = Number(document.getElementById("set-spanS1").value);
+        SETTINGS.spanS2 = Number(document.getElementById("set-spanS2").value);
+        SETTINGS.spanS3 = Number(document.getElementById("set-spanS3").value);
+        SETTINGS.spanS4 = Number(document.getElementById("set-spanS4").value);
+        SETTINGS.spanS5 = Number(document.getElementById("set-spanS5").value);
+        SETTINGS.spanS6 = Number(document.getElementById("set-spanS6").value);
+        SETTINGS.spanS7 = Number(document.getElementById("set-spanS7").value);
+        SETTINGS.spanS8 = Number(document.getElementById("set-spanS8").value);
+        SETTINGS.spanS9 = Number(document.getElementById("set-spanS9").value);
+        SETTINGS.spanKeine = Number(document.getElementById("set-spanKeine").value);
+
+        localStorage.setItem("gp_grid_settings", JSON.stringify(SETTINGS));
+
+        applyCSS();
+    };
+
+    document.getElementById("reset-settings").onclick = function(){
+
+        Object.assign(SETTINGS, DEFAULT_SETTINGS);
+
+        localStorage.setItem("gp_grid_settings", JSON.stringify(SETTINGS));
+
+        applyCSS();
+    };
+
+    document.getElementById("close-settings").onclick = function(){
+        panel.remove();
+    };
+}
+
+/* =============================
+   INIT
+============================= */
+
+createButton();
+applyCSS();
+
+})();
