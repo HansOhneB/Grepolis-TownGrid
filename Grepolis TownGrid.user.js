@@ -32,7 +32,7 @@ const DEFAULT_SETTINGS = {
     height: 660
 };
 
-const SETTINGS = {DEFAULT_SETTINGS};
+const SETTINGS = {...DEFAULT_SETTINGS};
 
 /* =============================
    SETTINGS LADEN
