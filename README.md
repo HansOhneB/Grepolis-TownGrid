@@ -19,18 +19,19 @@ Die Höhe der gesamten Übersicht in px
 
 Zeilen im Raster:
 Die Anzahl der im Hintergrund generierten Zeilen für das Raster
-(Wie viele verschiedene Gruppen theoretisch in eine Reihe passen)
+(Wie viele verschiedene Gruppen theoretisch in eine Spalte passen)
 Spalte_1_Zeile_1 | Spalte_2_Zeile_1 | Spalte_3_Zeile_1 | etc
 Spalte_1_Zeile_2 | Spalte_2_Zeile_2 | Spalte_3_Zeile_2 | etc
 Spalte_1_Zeile_3 | Spalte_2_Zeile_3 | Spalte_3_Zeile_3 | etc
 etc              | etc              | etc              | etc
-kann im nächsten Schritt individuell mit Gruppen beschrieben werden
+Kann im nächsten Schritt individuell mit Gruppen beschrieben werden
 Reihenfolge der Gruppen bleibt bestehen (Alle -> 0-9 / A-Z -> Keine Gruppe & Oben-Unten -> Links-Rechts)
 
 Anzahl Zeilen für Gruppen:
-Die Anzahl der im vorherigen Schritt generierten Zeilen für die jeweiligen Gruppen
+Die Anzahl der Zeilen für die jeweiligen Gruppen
 Sobald die Summe aller Gruppen der bisherigen Spalte größer als die Anzahl der Zeilen im Raster ist, springt die unterste Gruppe zur nächsten Spalte
-für nicht vorhandene Gruppen 0 eintragen
+Für nicht vorhandene Gruppen 0 eintragen
+Sollte summe(Alle, 1-10, Keine) = Spalten * Zeilen für Gruppen
 Alle: Anzahl der Spalten für die Gruppe Alle ( = Zeilen im Raster, wenn wie typisch die gesammte 1. Spalte)
 1-10: Anzahl der Spalten für die Stadtgruppen
 Keine: Anzahl der Spalten für die Gruppe Keine Gruppe
@@ -41,7 +42,7 @@ Alle | Gruppe 1 | Gruppe 4 | Gruppe 7 | Gruppe 10
 Alle | Gruppe 2 | Gruppe 4 | Gruppe 7 | Gruppe 10
 Alle | Gruppe 2 | Gruppe 5 | Gruppe 8 | Keine Gruppe
 Alle | Gruppe 2 | Gruppe 5 | Gruppe 8 | Keine Gruppe
-Beispiel mit Einstellungen (4, individuel, individuel, 4, 3, 1, 4, 2, 2, 2, 1, 0, 0, 0, 0, 1)
+Beispiel mit Einstellungen (4, individuell, individuell, 4, 3, 1, 4, 2, 2, 2, 1, 0, 0, 0, 0, 1)
 Alle     | Gruppe 2 | Gruppe 3 | Gruppe 5
 Alle     | Gruppe 2 | Gruppe 3 | Gruppe 5
 Alle     | Gruppe 2 | Gruppe 4 | Gruppe 6
