@@ -25,7 +25,7 @@ Spalte_1_Zeile_2 | Spalte_2_Zeile_2 | Spalte_3_Zeile_2 | etc
 Spalte_1_Zeile_3 | Spalte_2_Zeile_3 | Spalte_3_Zeile_3 | etc
 etc              | etc              | etc              | etc
 kann im nächsten Schritt individuell mit Gruppen beschrieben werden
-Reihenfolge der Gruppen bleibt bestehen (Alle -> 0-9 / A-Z -> Keine Gruppe)
+Reihenfolge der Gruppen bleibt bestehen (Alle -> 0-9 / A-Z -> Keine Gruppe & Oben-Unten -> Links-Rechts)
 
 Anzahl Zeilen für Gruppen:
 Die Anzahl der im vorherigen Schritt generierten Zeilen für die jeweiligen Gruppen
